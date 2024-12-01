@@ -1,0 +1,28 @@
+﻿@model Blog.Models.Article
+
+@{
+    ViewData["Title"] = "Статья: " + Model.Title;
+}
+
+<h2>@Model.Title</h2>
+
+<p>@Model.Content</p>
+
+<h3>Комментарии</h3>
+@foreach (var comment in Model.Comments)
+{
+    <div class="border p-2 my-2">
+        <strong>@comment.UserId</strong>:
+        <p>@comment.Content</p>
+    </div>
+}
+
+<h4>Добавить комментарий</h4>
+<form asp-action="AddComment" method="post">
+    <input type="hidden" name="articleId" value="@Model.UserId" />
+    <textarea name="content" class="form-control" required></textarea>
+    <button type="submit" class="btn btn-primary">Добавить комментарий</button>
+</form>
+
+<a asp-action="Index" class="btn btn-secondary">Назад к списку статей</a>
+
