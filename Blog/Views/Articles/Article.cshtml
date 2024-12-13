@@ -29,7 +29,7 @@
 
 // Форма для добавления комментариев
 <form asp-action="AddComment" method="post">
-    <input type="hidden" name="articleId" value="@Model.Id" /> <!-- Используйте Id статьи -->
+    <input type="hidden" name="articleId" value="@Model.Id" />
     <textarea name="content" placeholder="Ваш комментарий..."></textarea>
     <button type="submit">Add Comment</button>
 </form>
