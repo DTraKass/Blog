@@ -1,0 +1,17 @@
+﻿@model Blog.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+<h2>Профиль пользователя</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Добро пожаловать, @Model.FirstName @Model.LastName!</h5>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Адрес:</strong> @Model.Address</p>
+        <a asp-action="Edit" class="btn btn-primary">Редактировать профиль(В разработке)</a>
+        <a asp-action="Logout" class="btn btn-danger">Выйти</a>
+    </div>
+</div>

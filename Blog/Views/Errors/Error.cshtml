@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Произошла ошибка";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-danger">
+                    Упс, что-то пошло не так!
+                </div>
+                <div class="card-body">
+                    <p class="text-center">
+                        Мы приносим извинения, но произошла ошибка во время обработки вашего запроса.
+                    </p>
+                    <p class="text-center">
+                        Пожалуйста, попробуйте снова позже или <a asp-action="Contact" class="btn btn-link">свяжитесь с поддержкой</a>.
+                    </p>
+                </div>
+                <div class="card-footer text-muted text-center">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">На главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

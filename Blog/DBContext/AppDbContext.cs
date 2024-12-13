@@ -2,7 +2,6 @@
 using Blog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.DBContext {
     public class AppDbContext : IdentityDbContext<ApplicationUser>
@@ -17,7 +16,13 @@ namespace Blog.DBContext {
         public DbSet<Role> Roles { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<UserRole>()
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
+        }
     }
 
 

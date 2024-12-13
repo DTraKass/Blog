@@ -19,13 +19,13 @@
                     <a class="nav-link" asp-controller="Home" asp-action="Index">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Articles" asp-action="Index">Статьи</a>
+                    <a class="nav-link" asp-controller="Articles" asp-action="Articles">Статьи</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Articles" asp-action="Create">Создать статью</a>
+                    <a class="nav-link" asp-controller="Articles" asp-action="CreateArticle">Создать статью</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Account" asp-action="Login">Вход</a>
+                    <a class="nav-link" asp-controller="Account" asp-action="Loginview">Вход</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Account" asp-action="Register">Регистрация</a>
@@ -40,11 +40,12 @@
         </main>
     </div>
 
-    <footer class="text-center mt-4">
+    <footer class="text-center">
         <p>&copy; 2024 - Мой блог</p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

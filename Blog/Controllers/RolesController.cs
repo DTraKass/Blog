@@ -9,25 +9,37 @@ namespace Blog.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        private readonly LoggerService _loggerService;
+
         public RolesController(RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+
+            _loggerService = new LoggerService();
         }
 
         public async Task<IActionResult> AddRole(string userId, string roleName)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var result = await _userManager.AddToRoleAsync(user, roleName);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                _loggerService.LogUserAction($"Пользователь {user.FirstName} создал роль ");
             }
-
-            var result = await _userManager.AddToRoleAsync(user, roleName);
-
-            if (result.Succeeded)
+            catch (Exception ex)
             {
-                return RedirectToAction("Index");
+                _loggerService.LogError(ex.Message);
             }
             return View();
         }

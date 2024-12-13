@@ -1,42 +1,28 @@
 using Blog.DBContext;
 using Blog.Models;
+using Blog.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-void ConfigureServices(IServiceCollection services)
-{
-    services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlite("Data Source=mydatabase.db"));
-    services.AddIdentity<ApplicationUser, IdentityRole>()
-        .AddEntityFrameworkStores<AppDbContext>()
-        .AddDefaultTokenProviders();
-
-
-
-    services.AddControllersWithViews();
-    var builder = WebApplication.CreateBuilder(args);
-
-    builder.Services.AddDbContext<AppDbContext>(options =>
-       options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-    builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-    {
-        options.Password.RequiredLength = 6;
-    }).AddEntityFrameworkStores<AppDbContext>()
-.AddDefaultTokenProviders();
-
-    builder.Services.AddControllersWithViews();
-
-    builder.Services.AddControllersWithViews();
-
-    var app = builder.Build();
-
-
-
-}
 var builder = WebApplication.CreateBuilder(args);
 
+// Настройка сервиса контекста базы данных для SQLite
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Настройка службы аутентификации
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
+
+// Добавление контроллеров и представлений
 builder.Services.AddControllersWithViews();
+
+// Регистрация других необходимых служб
+builder.Services.AddSingleton<LoggerService>();
 
 var app = builder.Build();
 
@@ -51,6 +37,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // Add this line to enable authentication
 app.UseAuthorization();
 
 app.MapControllerRoute(

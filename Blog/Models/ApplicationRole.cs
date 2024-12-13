@@ -2,6 +2,6 @@
 {
     public class ApplicationRole
     {
-        public string Description { get; set; } // Дополнительное свойство
+        public string Description { get; set; }
     }
 }
