@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Добавляем контекст базы данных и настраиваем Identity
 builder.Services.AddDbContext<AppDbContext>(options =>
-   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+   options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Настройки для Identity
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -56,7 +56,9 @@ async Task InitializeRoles(IServiceProvider serviceProvider)
         var roleExist = await roleManager.RoleExistsAsync(roleName);
         if (!roleExist)
         {
-            await roleManager.CreateAsync(new ApplicationRole(roleName));
+            var role = new ApplicationRole(roleName) { Id = Guid.NewGuid().ToString() };
+
+            await roleManager.CreateAsync(role);
         }
     }
 }
