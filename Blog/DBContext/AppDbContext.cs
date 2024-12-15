@@ -12,6 +12,7 @@ namespace Blog.DBContext {
 
         public DbSet<User> Users { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<ArticleTag> ArticleTags { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -20,8 +21,23 @@ namespace Blog.DBContext {
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserRole>()
-                .HasKey(ur => new { ur.UserId, ur.RoleId });
+            modelBuilder.Entity<ArticleTag>()
+            .HasKey(at => new { at.ArticleId, at.TagId });
+
+            modelBuilder.Entity<ArticleTag>()
+                .HasOne(at => at.Article)
+                .WithMany(a => a.ArticleTags)
+                .HasForeignKey(at => at.ArticleId);
+
+            modelBuilder.Entity<ArticleTag>()
+                .HasOne(at => at.Tag)
+                .WithMany(t => t.ArticleTags)
+                .HasForeignKey(at => at.TagId);
+
+            modelBuilder.Entity<ApplicationRole>()
+                .HasMany<UserRole>()
+                .WithOne()
+                .HasForeignKey(ur => ur.RoleId);
         }
     }
 

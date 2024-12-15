@@ -1,7 +1,13 @@
-﻿namespace Blog.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Blog.Models
 {
-    public class ApplicationRole
+    using Microsoft.AspNetCore.Identity;
+
+    public class ApplicationRole : IdentityRole<string>
     {
-        public string Description { get; set; }
+        public ApplicationRole() : base() { }
+
+        public ApplicationRole(string roleName) : base(roleName) { }
     }
 }

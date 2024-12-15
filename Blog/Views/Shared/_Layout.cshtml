@@ -25,10 +25,13 @@
                     <a class="nav-link" asp-controller="Articles" asp-action="CreateArticle">Создать статью</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Account" asp-action="Loginview">Вход</a>
+                    <a class="nav-link" asp-controller="Account" asp-action="Loginview" method="post">Вход</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Account" asp-action="Register">Регистрация</a>
+                    <a class="nav-link" asp-controller="Account" asp-action="Register" method="post">Регистрация</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Account" asp-action="Profile">Профиль</a>
                 </li>
             </ul>
         </div>

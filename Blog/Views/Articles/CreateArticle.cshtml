@@ -6,7 +6,44 @@
 
 <h2>Создание новой статьи</h2>
 
+
+<form id="tagForm">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <h4>Добавление тегов(разрабатывается)</h4>
+    <input class="form-control" type="text" name="TagNames" placeholder="Введите теги через запятую" />
+    <button type="submit" class="btn btn-primary">Сохранить теги</button>
+</form>
+
+<div class="alert alert-success d-none" id="successAlert" role="alert"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tagForm').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '@Url.Action("CreateTag", "Tag")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('input[name="tagNames"]').val('');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Произошла ошибка: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
 <form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Title" class="control-label">Заголовок</label>
         <input asp-for="Title" class="form-control" />

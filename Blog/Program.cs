@@ -6,42 +6,57 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Настройка сервиса контекста базы данных для SQLite
+// Добавляем контекст базы данных и настраиваем Identity
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Настройка службы аутентификации
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+// Настройки для Identity
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
+    // Настройки для пароля
     options.Password.RequiredLength = 6;
 })
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
-// Добавление контроллеров и представлений
+// Другие сервисы
 builder.Services.AddControllersWithViews();
-
-// Регистрация других необходимых служб
 builder.Services.AddSingleton<LoggerService>();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+// Инициализация ролей
+using (var scope = app.Services.CreateScope())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    var services = scope.ServiceProvider;
+    await InitializeRoles(services);
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseAuthentication(); // Add this line to enable authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+   name: "default",
+   pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// Метод инициализации ролей
+async Task InitializeRoles(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+    string[] roleNames = { "Admin", "Moderator", "User" };
+
+    foreach (var roleName in roleNames)
+    {
+        var roleExist = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExist)
+        {
+            await roleManager.CreateAsync(new ApplicationRole(roleName));
+        }
+    }
+}

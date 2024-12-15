@@ -55,7 +55,7 @@ namespace Blog.Controllers
                     }
                 }
 
-                return View("Register", model);
+                return View("RegisterView", model);
             }
             catch (Exception ex)
             {
@@ -98,23 +98,18 @@ namespace Blog.Controllers
             return View(model);
         }
 
-        [HttpPost("account/logout")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             var user = await _userManager.GetUserAsync(User);
             await _signInManager.SignOutAsync();
 
-            if (user != null)
-            {
-                _loggerService.LogUserAction($"Пользователь {user.FirstName} вышел из аккаунта");
-            }
+            _loggerService.LogUserAction($"Пользователь {user.FirstName} вышел из аккаунта");
 
             return RedirectToAction("Index", "Home");
         }
         public async Task<IActionResult> Profile()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Получить ID текущего пользователя
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(userId);
             if (!User.Identity.IsAuthenticated)
             {
